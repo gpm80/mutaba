@@ -47,4 +47,16 @@ public class MainExample {
         pool.shutdown();
         System.out.printf("%s/100%n", success.get());
     }
+
+    private void process() {
+        final TaskLimiter<String, Integer> taskLimiter = new TaskLimiter<>(3, "cals-len-string", 3, 100, 3);
+        try {
+            Integer len = taskLimiter.createTask("string", 5, String::length).waitForThrow(10, TimeUnit.SECONDS);
+        } catch (RuntimeException rex) {
+            rex.printStackTrace();
+        }
+
+        Optional<Integer> len = taskLimiter.createTask("string", 5, String::length).waitFor(10, TimeUnit.SECONDS);
+    }
+
 }

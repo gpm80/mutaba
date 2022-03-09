@@ -16,6 +16,22 @@
 превышении возможна блокировка вашего keyApi.
 Чтобы избежать этих "неровностей", вам поможет библиотека MuTaBa.
 
+Два варианта ожидания выполнения задачи:
+```java
+Optional<Integer> len = taskLimiter.createTask("string", 5, String::length)
+    .waitFor(10, TimeUnit.SECONDS);
+```
+
+```java
+try {
+    Integer len = taskLimiter.createTask("string", 5, String::length)
+    .waitForThrow(10, TimeUnit.SECONDS);
+} catch (RuntimeException rex) {
+    rex.printStackTrace();
+}
+```
+
+Пример подсчета длины строк:
 ```java
 public class MainExample {
 
@@ -55,3 +71,4 @@ public class MainExample {
     }
 }
 ```
+
