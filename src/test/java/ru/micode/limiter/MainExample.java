@@ -28,17 +28,16 @@ public class MainExample {
         for (int i = 0; i < 100; i++) {
             pool.execute(() -> {
                 final String str = tasks[random.nextInt(tasks.length)];
-                final TaskWrapper<String, Integer> task =
-                    taskLimiter.createTask(str, random.nextInt(5), val -> {
-                        TimeUnit.MILLISECONDS.sleep(random.nextInt(50));
-                        return val.length();
-                    });
-                final Optional<Integer> result = task.waitFor(20, TimeUnit.SECONDS);
+                final int priority = random.nextInt(5);
+                final Optional<Integer> result = taskLimiter.createTask(str, priority, val -> {
+                    TimeUnit.MILLISECONDS.sleep(random.nextInt(50));
+                    return val.length();
+                }).waitFor(20, TimeUnit.SECONDS);
                 if (result.isPresent()) {
                     success.incrementAndGet();
                     System.out.printf("len: %s = %s %n", str, result.get());
                 } else {
-                    System.err.printf("len: %s = ignore priority: %s %n", str, task.getPriority());
+                    System.err.printf("len: %s = ignore priority: %s %n", str, priority);
                 }
                 latch.countDown();
             });
@@ -48,5 +47,4 @@ public class MainExample {
         pool.shutdown();
         System.out.printf("%s/100%n", success.get());
     }
-
 }
