@@ -1,6 +1,8 @@
 # Ограничитель выполнения задач.
 ## Multi Tasks Balancer MuTaBa.
 
+[![License](https://shields.io/badge/license-Apache-blue)](license-Apache)
+
 Возможности:
 - ограничение количества проходимых задач в секунду;
 - ограничение количества проходимых задач в минуту;
